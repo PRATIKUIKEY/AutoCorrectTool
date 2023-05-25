@@ -1,0 +1,36 @@
+import nltk
+from nltk.corpus import words
+
+# Load the NLTK words corpus
+nltk.download('words')
+word_list = set(words.words())
+
+# Function to find the nearest word suggestion
+def find_nearest_word(word):
+    # Case-insensitive comparison
+    word = word.lower()
+
+    # If the word is already correct, return it
+    if word in word_list:
+        return word
+
+    # Calculate the edit distance between the word and all words in the corpus
+    edit_distances = [(w, nltk.edit_distance(word, w)) for w in word_list]
+
+    # Sort the edit distances in ascending order
+    sorted_distances = sorted(edit_distances, key=lambda x: x[1])
+
+    # Return the word with the smallest edit distance (nearest word suggestion)
+    return sorted_distances[0][0] if sorted_distances else None
+
+# Example usage
+word = 'speling'
+
+# Find the nearest word suggestion
+nearest_word = find_nearest_word(word)
+
+# Print the corrected word or nearest suggestion
+if nearest_word:
+    print(f"Corrected word: {nearest_word}")
+else:
+    print("No suggestions found.")
